@@ -1,0 +1,29 @@
+---
+- name: Set authorized key took from file
+  authorized_key:
+    user: "{{USERNAME}}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+- name: Copy Public Keys Locally
+  fetch:
+    src: ~/.ssh/id_rsa.pub
+    dest: "./public_keys/{{inventory_hostname}}.pub"
+    flat: yes
+- name: Upload public keys in other servers
+  authorized_key:
+    user: "{{USERNAME}}"
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_fileglob: ./public_keys/*.pub
+- name: Delete folder public_keys
+  authorized_key:
+    user: "{{USERNAME}}"
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_fileglob: ./public_keys/*.pub
+- name: Delete local files
+  run_once: true
+  delegate_to: localhost
+  file: 
+    path: "./public_keys"
+    state: absent
