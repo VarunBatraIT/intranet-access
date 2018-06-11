@@ -1,6 +1,6 @@
 galaxy_info:
   author: Varun Batra
-  description: A Web Application Consultant
+  description: Adds servers ssh keys to each other and your public key to all servers.
   company: spicegems.com
 
   # If the issue tracker for your role is not on github, uncomment the
